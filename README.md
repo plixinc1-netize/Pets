@@ -54,26 +54,31 @@ que cualquiera edite la placa desde la página), pero no es seguridad de
 verdad. Si más adelante quieres cerrarlo mejor, la mejora natural es mover la
 verificación de contraseña a una Cloud Function.
 
-## 2. Subir el sitio a GitHub
+## 2. Desplegar el sitio (ahora en Vercel)
 
-1. Crea un repositorio en GitHub y sube todo el contenido de esta carpeta
-   (`index.html`, `admin.html`, `css/`, `js/`, etc.) a la raíz del repo.
-2. En **Settings → Pages**, activa GitHub Pages apuntando a la rama
-   `main` (carpeta `/root`).
-3. GitHub te dará una URL como
-   `https://erichernandez12668.github.io/Pets/`.
+El proyecto no necesita build ni configuración especial: son archivos
+estáticos (`index.html`, `admin.html`, `css/`, `js/`). Basta con:
 
-Cuando tengas esa URL, entra a `https://erichernandez12668.github.io/Pets/admin.html`:
+1. Subir el contenido de esta carpeta a un repositorio de GitHub.
+2. En Vercel, importar ese repositorio como proyecto (sin framework /
+   "Other"), dejando la raíz del repo como raíz del sitio.
+3. Vercel te da una URL, en este caso:
+   `https://pets-pi-ten.vercel.app/`.
+
+Cuando tengas esa URL, entra a `https://pets-pi-ten.vercel.app/admin.html`:
 el campo "URL base" se autocompleta con
-`https://erichernandez12668.github.io/Pets/index.html`. Si por algo la detecta mal,
-puedes escribirla a mano.
+`https://pets-pi-ten.vercel.app/`. Si por algo la detecta mal,
+puedes escribirla a mano (debe terminar en "/").
+
+> También funciona igual en GitHub Pages si en algún momento vuelves a esa
+> opción: el panel admin detecta la URL base sola sin importar el hosting.
 
 ## 3. Generar una placa y grabar el chip NFC
 
 1. En `admin.html`, escribe un código o dale a **Generar aleatorio**.
 2. Presiona **Crear placa y generar URL** → esto crea `llenado.yaselleno =
    false` en Firestore y te muestra la URL final, algo como:
-   `https://erichernandez12668.github.io/Pets/index.html?codigo=A1B2C3`
+   `https://pets-pi-ten.vercel.app/?codigo=A1B2C3`
 3. Copia esa URL.
 4. Con una app como **NFC Tools** (Android/iOS), escribe esa URL como
    registro tipo "URL/URI" en el chip NFC.
@@ -81,7 +86,7 @@ puedes escribirla a mano.
 
 ## 4. Uso por el dueño de la mascota
 
-1. Acerca el celular al chip → abre `index.html?codigo=A1B2C3`.
+1. Acerca el celular al chip → abre `https://pets-pi-ten.vercel.app/?codigo=A1B2C3`.
 2. Si es la primera vez, llena el formulario (la única casilla obligatoria es
    la contraseña de modificación) y confirma.
 3. La foto se sube a `Storage/A1B2C3/foto` y los datos a
