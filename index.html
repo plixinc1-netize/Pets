@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Identificación de mascota</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="mark">🐾</div>
+      <div class="title-block">
+        <span class="eyebrow" id="codigoEyebrow">Placa</span>
+        <h1>Identificación de mascota</h1>
+      </div>
+    </div>
+
+    <div id="loadingState" class="center"><span class="spinner"></span> Consultando la placa…</div>
+    <div id="errorState" style="display:none"></div>
+
+    <!-- ===== Estado: formulario para llenar por primera vez ===== -->
+    <section id="formState" style="display:none">
+      <div class="panel">
+        <p style="margin-top:0;color:var(--ink-soft)">
+          Esta placa aún no tiene datos. Completa la información de tu mascota
+          para poder identificarla si se pierde.
+        </p>
+
+        <form id="petForm">
+          <div class="field">
+            <label for="tipoAnimal">Tipo de animal</label>
+            <select id="tipoAnimal">
+              <option value="">Selecciona…</option>
+              <option>Perro</option>
+              <option>Gato</option>
+              <option>Conejo</option>
+              <option>Hámster</option>
+              <option>Cobayo / Cuy</option>
+              <option>Chinchilla</option>
+              <option>Hurón</option>
+              <option>Erizo</option>
+              <option>Ave / Pájaro</option>
+              <option>Loro</option>
+              <option>Canario</option>
+              <option>Pez</option>
+              <option>Tortuga</option>
+              <option>Iguana</option>
+              <option>Camaleón</option>
+              <option>Serpiente</option>
+              <option>Araña / Tarántula</option>
+              <option>Caballo</option>
+              <option>Cerdo miniatura</option>
+              <option>Cabra</option>
+              <option>Oveja</option>
+              <option>Gallina</option>
+              <option>Pato</option>
+              <option value="__otro__">Otro…</option>
+            </select>
+          </div>
+          <div class="field" id="tipoOtroWrap" style="display:none">
+            <label for="tipoOtro">¿Qué tipo de animal es?</label>
+            <input type="text" id="tipoOtro" placeholder="Escribe el tipo de animal" />
+          </div>
+
+          <div class="field">
+            <label for="nombre">Nombre de la mascota</label>
+            <input type="text" id="nombre" placeholder="Ej. Firulais" />
+          </div>
+
+          <div class="field">
+            <label for="raza">Raza</label>
+            <input type="text" id="raza" placeholder="Ej. Labrador, mestizo, etc." />
+          </div>
+
+          <div class="field">
+            <div class="check-row">
+              <input type="checkbox" id="conoceNacimiento" />
+              <label for="conoceNacimiento">Conozco el año de nacimiento (en vez de la fecha de adopción)</label>
+            </div>
+          </div>
+
+          <div class="field" id="fechaAdopcionWrap">
+            <label for="fechaAdopcion">Fecha de adopción</label>
+            <input type="date" id="fechaAdopcion" />
+            <div class="hint">Se usará para mostrar el tiempo que lleva con la familia.</div>
+          </div>
+
+          <div class="field" id="anoNacimientoWrap" style="display:none">
+            <label for="anoNacimiento">Año de nacimiento</label>
+            <input type="number" id="anoNacimiento" placeholder="Ej. 2021" min="1990" />
+          </div>
+
+          <div class="field">
+            <label for="foto">Foto de la mascota</label>
+            <input type="file" id="foto" accept="image/*" />
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="telefonoDueno">Teléfono del dueño</label>
+              <input type="tel" id="telefonoDueno" placeholder="Ej. 55 1234 5678" />
+            </div>
+            <div class="field">
+              <label for="correoDueno">Correo del dueño</label>
+              <input type="email" id="correoDueno" placeholder="correo@ejemplo.com" />
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--line);margin:20px 0" />
+
+          <div class="field">
+            <label for="contrasena">Contraseña de modificación <span class="required-mark">*</span></label>
+            <input type="password" id="contrasena" placeholder="Para poder editar estos datos después" />
+          </div>
+          <div class="field">
+            <label for="contrasenaConfirm">Confirma la contraseña <span class="required-mark">*</span></label>
+            <input type="password" id="contrasenaConfirm" />
+            <div class="hint">Guárdala bien: la necesitarás para modificar estos datos más adelante.</div>
+          </div>
+
+          <div id="formMsg"></div>
+
+          <button type="submit" class="btn-primary">Guardar datos de mi mascota</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== Estado: mostrar datos ya guardados ===== -->
+    <section id="viewState" style="display:none">
+      <div class="tag-card">
+        <span class="tag-engrave" id="viewCodigo"></span>
+        <div class="pet-header">
+          <h2 id="viewNombre">—</h2>
+          <button type="button" class="btn-icon" id="btnEditar" title="Modificar datos">✎</button>
+        </div>
+        <img id="viewFoto" class="pet-photo" style="display:none" alt="Foto de la mascota" />
+        <dl class="data-list" id="viewDatos"></dl>
+      </div>
+    </section>
+
+    <footer class="note">Placa digital vinculada por NFC · datos alojados en Firebase</footer>
+  </div>
+
+  <!-- Modal: pedir contraseña -->
+  <div class="modal-backdrop hidden" id="modalPassword">
+    <div class="modal">
+      <h3>Modificar datos</h3>
+      <p style="color:var(--ink-soft);font-size:14px">Escribe la contraseña de modificación que se guardó para esta placa.</p>
+      <div class="field">
+        <label for="passInput">Contraseña</label>
+        <input type="password" id="passInput" />
+      </div>
+      <div id="passMsg"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="btnCancelPass">Cancelar</button>
+        <button type="button" class="btn-primary" id="btnVerificarPass">Verificar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: editar datos -->
+  <div class="modal-backdrop hidden" id="modalEditar">
+    <div class="modal">
+      <h3>Editar datos de la mascota</h3>
+      <form id="editForm">
+        <div class="field">
+          <label for="editTipoAnimal">Tipo de animal</label>
+          <select id="editTipoAnimal">
+            <option value="">Selecciona…</option>
+            <option>Perro</option>
+            <option>Gato</option>
+            <option>Conejo</option>
+            <option>Hámster</option>
+            <option>Cobayo / Cuy</option>
+            <option>Chinchilla</option>
+            <option>Hurón</option>
+            <option>Erizo</option>
+            <option>Ave / Pájaro</option>
+            <option>Loro</option>
+            <option>Canario</option>
+            <option>Pez</option>
+            <option>Tortuga</option>
+            <option>Iguana</option>
+            <option>Camaleón</option>
+            <option>Serpiente</option>
+            <option>Araña / Tarántula</option>
+            <option>Caballo</option>
+            <option>Cerdo miniatura</option>
+            <option>Cabra</option>
+            <option>Oveja</option>
+            <option>Gallina</option>
+            <option>Pato</option>
+            <option value="__otro__">Otro…</option>
+          </select>
+        </div>
+        <div class="field" id="editTipoOtroWrap" style="display:none">
+          <label for="editTipoOtro">¿Qué tipo de animal es?</label>
+          <input type="text" id="editTipoOtro" />
+        </div>
+
+        <div class="field">
+          <label for="editNombre">Nombre</label>
+          <input type="text" id="editNombre" />
+        </div>
+        <div class="field">
+          <label for="editRaza">Raza</label>
+          <input type="text" id="editRaza" />
+        </div>
+
+        <div class="field">
+          <div class="check-row">
+            <input type="checkbox" id="editConoceNacimiento" />
+            <label for="editConoceNacimiento">Conozco el año de nacimiento</label>
+          </div>
+        </div>
+        <div class="field" id="editFechaAdopcionWrap">
+          <label for="editFechaAdopcion">Fecha de adopción</label>
+          <input type="date" id="editFechaAdopcion" />
+        </div>
+        <div class="field" id="editAnoNacimientoWrap" style="display:none">
+          <label for="editAnoNacimiento">Año de nacimiento</label>
+          <input type="number" id="editAnoNacimiento" min="1990" />
+        </div>
+
+        <div class="field">
+          <label for="editFoto">Reemplazar foto (opcional)</label>
+          <input type="file" id="editFoto" accept="image/*" />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="editTelefonoDueno">Teléfono del dueño</label>
+            <input type="tel" id="editTelefonoDueno" />
+          </div>
+          <div class="field">
+            <label for="editCorreoDueno">Correo del dueño</label>
+            <input type="email" id="editCorreoDueno" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="editContrasenaNueva">Nueva contraseña de modificación (opcional)</label>
+          <input type="password" id="editContrasenaNueva" placeholder="Déjalo vacío para no cambiarla" />
+        </div>
+
+        <div id="editMsg"></div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="btnCancelEdit">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

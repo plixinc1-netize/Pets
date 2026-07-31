@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Administrador · Placas NFC</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="mark">P</div>
+      <div class="title-block">
+        <span class="eyebrow">Panel interno</span>
+        <h1>Administrador de placas</h1>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p style="margin-top:0;color:var(--ink-soft)">
+        Genera un código único por placa. Esto crea el registro en Firebase
+        (colección con el código, documento <span class="mono">llenado</span>
+        en <span class="mono">false</span>) y te da la URL exacta que debes
+        grabar en el chip NFC.
+      </p>
+
+      <div class="field">
+        <label for="baseUrl">URL base del sitio (la carpeta donde vive index.html)</label>
+        <input type="text" id="baseUrl" class="mono" />
+        <div class="hint">Debe terminar en "/". Se detecta automáticamente al subir el sitio a GitHub Pages. Ajústala si es distinta.</div>
+      </div>
+
+      <div class="field">
+        <label for="codigoInput">Código de la placa</label>
+        <div class="row">
+          <input type="text" id="codigoInput" class="mono" placeholder="Ej. A1B2C3" />
+          <button type="button" class="btn-secondary" id="btnRandom" style="flex:0 0 auto">Generar aleatorio</button>
+        </div>
+        <div class="hint">Letras y números, sin espacios. Debe ser único por placa.</div>
+      </div>
+
+      <div id="adminMsg"></div>
+
+      <button type="button" class="btn-primary" id="btnCrear">Crear placa y generar URL</button>
+    </div>
+
+    <div id="resultBox" class="panel" style="display:none">
+      <h3 style="font-size:16px;margin-bottom:10px">URL lista para grabar</h3>
+      <div class="ledger-item">
+        <span class="code-chip" id="resultCode"></span>
+        <span class="url-text" id="resultUrl"></span>
+        <button type="button" class="btn-secondary" id="btnCopy" style="flex:0 0 auto">Copiar</button>
+      </div>
+      <div class="hint">Usa una app como "NFC Tools" para escribir esta URL en el chip.</div>
+    </div>
+
+    <div class="panel">
+      <h3 style="font-size:16px">Placas generadas</h3>
+      <div id="ledger"><div class="center">Cargando registro…</div></div>
+    </div>
+
+    <footer class="note">Colección Firestore: <span class="mono">registro_codigos</span> · proyecto <span class="mono">frame-9bd7a</span></footer>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

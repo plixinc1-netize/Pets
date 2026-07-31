@@ -1,0 +1,29 @@
+rules_version = '2';
+
+// Reglas de ejemplo para el proyecto de placas NFC.
+// Cada placa es una "colección" cuyo ID es el código (ej. A1B2C3), con dos
+// documentos dentro: "llenado" y "datos". También existe la colección
+// auxiliar "registro_codigos" que usa el panel administrador.
+//
+// Estas reglas son intencionalmente abiertas para que el sitio funcione
+// sin necesidad de un usuario logueado (no usamos Firebase Auth). Esto
+// significa que cualquiera con el código puede leer/escribir esos documentos,
+// que es exactamente el comportamiento que se pidió (leer con el celular,
+// llenar el formulario, editar con la contraseña validada en el propio
+// JavaScript). Ver la nota de seguridad en el README sobre la contraseña.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Documentos "llenado" y "datos" dentro de la colección de cada código.
+    match /{codigo}/{documento} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Registro de códigos generados (usado solo por admin.html).
+    match /registro_codigos/{codigo} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

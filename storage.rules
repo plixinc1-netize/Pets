@@ -1,0 +1,14 @@
+rules_version = '2';
+
+// Reglas de ejemplo para Firebase Storage.
+// Cada foto se guarda en la ruta {codigo}/foto, con nombre fijo para que al
+// editar se sobrescriba en vez de acumular archivos.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{codigo}/{archivo} {
+      allow read: if true;
+      allow write: if request.resource.size < 8 * 1024 * 1024
+                    && request.resource.contentType.matches('image/.*');
+    }
+  }
+}
