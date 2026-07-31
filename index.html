@@ -96,6 +96,11 @@
             <input type="file" id="foto" accept="image/*" />
           </div>
 
+          <div class="field">
+            <label for="nombreDueno">Nombre del dueño</label>
+            <input type="text" id="nombreDueno" placeholder="Ej. Ana Pérez" />
+          </div>
+
           <div class="row">
             <div class="field">
               <label for="telefonoDueno">Teléfono del dueño</label>
@@ -105,6 +110,12 @@
               <label for="correoDueno">Correo del dueño</label>
               <input type="email" id="correoDueno" placeholder="correo@ejemplo.com" />
             </div>
+          </div>
+
+          <div class="field">
+            <label for="direccionCasa">Dirección de casa</label>
+            <input type="text" id="direccionCasa" placeholder="Ej. Calle Reforma 123, Col. Centro, CDMX" />
+            <div class="hint">Con esto se genera un link directo a Google Maps (no usa ninguna API ni clave, solo abre Maps con el texto que escribas).</div>
           </div>
 
           <hr style="border:none;border-top:1px solid var(--line);margin:20px 0" />
@@ -228,6 +239,11 @@
           <input type="file" id="editFoto" accept="image/*" />
         </div>
 
+        <div class="field">
+          <label for="editNombreDueno">Nombre del dueño</label>
+          <input type="text" id="editNombreDueno" />
+        </div>
+
         <div class="row">
           <div class="field">
             <label for="editTelefonoDueno">Teléfono del dueño</label>
@@ -237,6 +253,12 @@
             <label for="editCorreoDueno">Correo del dueño</label>
             <input type="email" id="editCorreoDueno" />
           </div>
+        </div>
+
+        <div class="field">
+          <label for="editDireccionCasa">Dirección de casa</label>
+          <input type="text" id="editDireccionCasa" placeholder="Ej. Calle Reforma 123, Col. Centro, CDMX" />
+          <div class="hint">Con esto se genera un link directo a Google Maps.</div>
         </div>
 
         <div class="field">

@@ -54,6 +54,14 @@ function calcularTiempoDesdeFecha(fechaISO) {
   return `${anos} año${anos === 1 ? "" : "s"}`;
 }
 
+// Construye un link universal de Google Maps a partir de un texto de
+// dirección, sin usar ninguna API key ni SDK de Google Maps: es la misma
+// URL que se genera cuando compartes una búsqueda desde la app de Maps.
+function construirLinkMaps(direccion) {
+  const q = encodeURIComponent(direccion);
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
+
 // ---------- Arranque ----------
 
 const codigo = getCodigo();
@@ -152,8 +160,10 @@ function initFormulario() {
       tipoAnimal: tipoFinal || "",
       nombre: document.getElementById("nombre").value.trim(),
       raza: document.getElementById("raza").value.trim(),
+      nombreDueno: document.getElementById("nombreDueno").value.trim(),
       telefonoDueno: document.getElementById("telefonoDueno").value.trim(),
       correoDueno: document.getElementById("correoDueno").value.trim(),
+      direccionCasa: document.getElementById("direccionCasa").value.trim(),
       contrasenaModificacion: contrasena,
       metodoEdad: conoceNacimiento.checked ? "nacimiento" : "adopcion",
       fechaAdopcion: conoceNacimiento.checked ? "" : document.getElementById("fechaAdopcion").value,
@@ -217,8 +227,16 @@ function renderVista() {
     items.push(["Tiempo con la familia", calcularTiempoDesdeFecha(d.fechaAdopcion)]);
   }
 
+  if (d.nombreDueno) items.push(["Nombre del dueño", d.nombreDueno]);
   if (d.telefonoDueno) items.push(["Teléfono del dueño", d.telefonoDueno]);
   if (d.correoDueno) items.push(["Correo del dueño", d.correoDueno]);
+  if (d.direccionCasa) {
+    const link = construirLinkMaps(d.direccionCasa);
+    items.push([
+      "Dirección de casa",
+      `${d.direccionCasa} — <a href="${link}" target="_blank" rel="noopener noreferrer">Ver en Google Maps ↗</a>`,
+    ]);
+  }
 
   const dl = document.getElementById("viewDatos");
   if (items.length === 0) {
@@ -305,8 +323,10 @@ function initEdicion() {
 
     document.getElementById("editNombre").value = d.nombre || "";
     document.getElementById("editRaza").value = d.raza || "";
+    document.getElementById("editNombreDueno").value = d.nombreDueno || "";
     document.getElementById("editTelefonoDueno").value = d.telefonoDueno || "";
     document.getElementById("editCorreoDueno").value = d.correoDueno || "";
+    document.getElementById("editDireccionCasa").value = d.direccionCasa || "";
     document.getElementById("editContrasenaNueva").value = "";
 
     if (d.metodoEdad === "nacimiento") {
@@ -341,8 +361,10 @@ function initEdicion() {
       tipoAnimal: tipoFinal || "",
       nombre: document.getElementById("editNombre").value.trim(),
       raza: document.getElementById("editRaza").value.trim(),
+      nombreDueno: document.getElementById("editNombreDueno").value.trim(),
       telefonoDueno: document.getElementById("editTelefonoDueno").value.trim(),
       correoDueno: document.getElementById("editCorreoDueno").value.trim(),
+      direccionCasa: document.getElementById("editDireccionCasa").value.trim(),
       metodoEdad: editConoceNacimiento.checked ? "nacimiento" : "adopcion",
       fechaAdopcion: editConoceNacimiento.checked ? "" : document.getElementById("editFechaAdopcion").value,
       anoNacimiento: editConoceNacimiento.checked

@@ -19,8 +19,9 @@ Firestore
       ├── llenado          (documento) → { yaselleno: false | true }
       └── datos            (documento) → tipoAnimal, nombre, raza,
                                           metodoEdad, fechaAdopcion /
-                                          anoNacimiento, telefonoDueno,
-                                          correoDueno, contrasenaModificacion,
+                                          anoNacimiento, nombreDueno,
+                                          telefonoDueno, correoDueno,
+                                          direccionCasa, contrasenaModificacion,
                                           fotoURL
  └── registro_codigos      (colección auxiliar solo para el panel admin)
       └── A1B2C3            → { codigo, url, creado }
